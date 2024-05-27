@@ -22,6 +22,14 @@ const products = [{
     count: 56,
   },
   priceCents: 799,
+}, {
+  image: 'images/products/black-2-slot-toaster.jpg',
+  name: ' 2 Slot Toaster Black',
+  rating: {
+    stars: 5,
+    count: 2197,
+  },
+  priceCents: 1899,
 }];
 
 let productsHTML = '';
@@ -30,7 +38,7 @@ products.forEach((product) => {
   productsHTML += `
   <div class="product-container">
           <div class="product-image-container">
-            <img class="product-image src="${product.image}">
+            <img class="product-image" src="${product.image}">
           </div>
 
           <div class="product-name limit-text-to-2-lines">
