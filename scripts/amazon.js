@@ -24,7 +24,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="quantity-selector-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -40,7 +40,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart added-to-cart-${product.id}">
             <img src="images/icons/checkmark.png">
             Added
           </div>
@@ -52,14 +52,16 @@ products.forEach((product) => {
   `;
 });
 
-document.querySelector('.products-grid').innerHTML = productsHTML;
 
+document.querySelector('.products-grid').innerHTML = productsHTML;
 document.querySelectorAll('.add-to-cart-button')
 .forEach((button) => {
   button.addEventListener('click', () =>{
 
-    const productId = button.dataset.productId;
+    const {productId} = button.dataset;
     let matchingItem;
+    let inputEl = document.querySelector(`.quantity-selector-${productId}`);
+    let input = Number(inputEl.value);
 
     cart.forEach((item) => {
       if(productId === item.productId) {
@@ -67,17 +69,24 @@ document.querySelectorAll('.add-to-cart-button')
       }
     });
     if(matchingItem) {
-      matchingItem.quantity++;
+      matchingItem.quantity += input;
     } else {
       cart.push({
         productId: productId,
-        quantity: 1,
+        quantity: input,
       });  
     }
     let totalQuantity = 0;
     cart.forEach((item) => {
       totalQuantity += item.quantity;
     });
-    document.querySelector('.cart-quantity').innerHTML = `${totalQuantity}`;
+    const added = document.querySelector(`.added-to-cart-${productId}`);
+    added.classList.add('added-active');
+    setTimeout(() => {
+      added.classList.remove('added-active');
+    }, 2500);
+    document.querySelector('.cart-quantity').innerHTML = `${totalQuantity}`;    
   });
 });
+
+
