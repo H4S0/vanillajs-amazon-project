@@ -1,3 +1,6 @@
+import { cart } from '../data/cart.js';
+import { products } from '../data/products.js';
+
 let productsHTML = '';
 
 products.forEach((product) => {
@@ -59,9 +62,10 @@ document.querySelectorAll('.add-to-cart-button')
   button.addEventListener('click', () =>{
 
     const {productId} = button.dataset;
-    let matchingItem;
     let inputEl = document.querySelector(`.quantity-selector-${productId}`);
     let input = Number(inputEl.value);
+
+    let matchingItem;
 
     cart.forEach((item) => {
       if(productId === item.productId) {
