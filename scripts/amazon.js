@@ -1,5 +1,6 @@
-import { cart } from '../data/cart.js';
+import { cart, addToCart, addedText, updateQuantity, saveCartToLocalStorage } from '../data/cart.js';
 import { products } from '../data/products.js';
+import { formatCurrency } from './utils/money.js';
 
 let productsHTML = '';
 
@@ -23,7 +24,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-price">
-            $${(product.priceCents / 100).toFixed(2)}
+            $${formatCurrency(product.priceCents)}
           </div>
 
           <div class="product-quantity-container">
@@ -61,36 +62,15 @@ document.querySelectorAll('.add-to-cart-button')
 .forEach((button) => {
   button.addEventListener('click', () =>{
 
-    const {productId} = button.dataset;
-    let inputEl = document.querySelector(`.quantity-selector-${productId}`);
-    let input = Number(inputEl.value);
+  const {productId} = button.dataset;
+  let inputEl = document.querySelector(`.quantity-selector-${productId}`);
+  let input = Number(inputEl.value);
 
-    let matchingItem;
-
-    cart.forEach((item) => {
-      if(productId === item.productId) {
-        matchingItem = item;
-      }
-    });
-    if(matchingItem) {
-      matchingItem.quantity += input;
-    } else {
-      cart.push({
-        productId: productId,
-        quantity: input,
-      });  
-    }
-    let totalQuantity = 0;
-    cart.forEach((item) => {
-      totalQuantity += item.quantity;
-    });
-    const added = document.querySelector(`.added-to-cart-${productId}`);
-    added.classList.add('added-active');
-    setTimeout(() => {
-      added.classList.remove('added-active');
-    }, 2500);
-    document.querySelector('.cart-quantity').innerHTML = `${totalQuantity}`;    
+  addToCart(productId, input);
+  updateQuantity(productId, input);
+  addedText(productId);
   });
 });
+
 
 
