@@ -22,6 +22,7 @@ export const addToCart = (productId, quantity) => {
       quantity: quantity,
     });
   }
+  updateQuantity();
   saveCartToLocalStorage();
 }
 
@@ -34,7 +35,7 @@ export const addedText = (productId) => {
 }
 
 
-export const updateQuantity = (productIdm) => {
+export const updateQuantity = () => {
   let totalQuantity = 0;
 
   cart.forEach((item) => {
@@ -43,3 +44,6 @@ export const updateQuantity = (productIdm) => {
   document.querySelector('.cart-quantity').innerHTML = `${totalQuantity}`;
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  updateQuantity();
+});
