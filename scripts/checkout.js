@@ -38,7 +38,7 @@ cart.forEach((cartItem) => {
         <div class="product-name">${matchingProduct.name}</div>
         <div class="product-price">${formatCurrency(matchingProduct.priceCents)}</div>
         <div class="product-quantity">
-          <span>Quantity: <span class="quantity-label">${cartItem.quantity}</span></span>
+          <span>Quantity: <span class="quantity-label quantity-label-${matchingProduct.id}">${cartItem.quantity}</span></span>
           <div class="product-quantity-container">
             <select class="checkout-quantity-selector" data-product-id="${matchingProduct.id}">
             <option selected value="1">1</option>
@@ -93,7 +93,7 @@ cart.forEach((cartItem) => {
 let checkOutPage = document.querySelector('.order-summary');
 checkOutPage.innerHTML = checkOutHTML;
 
-const deleteButtons = document.querySelectorAll('.delete-quantity-link');
+const deleteButtons = document.querySelectorAll(`.delete-quantity-link`);
 
 deleteButtons.forEach((link) => {
   link.addEventListener('click', () => {
@@ -112,21 +112,22 @@ deleteButtons.forEach((link) => {
   });
 });
 
+
 const updateButtons = document.querySelectorAll('.update-quantity-link');
-const quantityLabel = document.querySelector('.quantity-label');
+
 updateButtons.forEach((button) => {
   button.addEventListener('click', () => {
     const productId = button.dataset.productId;
     const updateQuantityEl = document.querySelector(`.checkout-quantity-selector[data-product-id="${productId}"]`);
+    const updateButtonQuantity = parseInt(updateQuantityEl.value);
+    const cartItem = cart.find(item => item.productId === productId);
+    let quantityLabel = document.querySelector(`.quantity-label-${productId}`);
+      
+    cartItem.quantity = updateButtonQuantity;
+    quantityLabel.innerHTML = cartItem.quantity;
 
-
-      const updateButtonQuantity = parseInt(updateQuantityEl.value);
-      const cartItem = cart.find(item => item.productId === productId);
-
-      cartItem.quantity = updateButtonQuantity;
-      quantityLabel.innerText = cartItem.quantity;
-      updateCheckOutItems();
-      saveCartToLocalStorage();
+    updateCheckOutItems();
+    saveCartToLocalStorage();
   });
 });
 
