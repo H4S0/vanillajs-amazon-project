@@ -2,6 +2,17 @@ import { cart, saveCartToLocalStorage } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
+let checkOutEl = document.querySelector('.return-to-home-link');
+let checkOutItems = 0;
+
+const updateCheckOutItems = () => {
+  checkOutItems = 0;
+  cart.forEach((item) => {
+    checkOutItems += item.quantity;
+  });
+  checkOutEl.innerText = `${checkOutItems}`;
+};
+
 let checkOutHTML = '';
 
 cart.forEach((cartItem) => {
@@ -96,18 +107,21 @@ cart.forEach((cartItem) => {
 let checkOutPage = document.querySelector('.order-summary');
 checkOutPage.innerHTML = checkOutHTML;
 
-let deleteButton = document.querySelectorAll('.delete-quantity-link');
+let deleteButtons = document.querySelectorAll('.delete-quantity-link');
 
-deleteButton.forEach((link) => {
-  link.addEventListener('click', () =>{
+deleteButtons.forEach((link) => {
+  link.addEventListener('click', () => {
     const productId = link.dataset.productId;
 
     const newCart = cart.filter(cartItem => cartItem.productId !== productId);
-      cart.length = 0;
-      cart.push(...newCart);
+    cart.length = 0;
+    cart.push(...newCart);
 
     const cartContainer = document.querySelector(`.cart-item-product-id-${productId}`);
     cartContainer.remove();
+    updateCheckOutItems();
     saveCartToLocalStorage();
   });
 });
+
+updateCheckOutItems();
