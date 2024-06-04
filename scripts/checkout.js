@@ -1,20 +1,8 @@
-import { cart, saveCartToLocalStorage } from "../data/cart.js";
+import { cart, paymentCheckout, saveCartToLocalStorage, updateCheckOutItems } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
-let checkOutEl = document.querySelector('.return-to-home-link');
-let checkOutItems = 0;
-
-const updateCheckOutItems = () => {
-  checkOutItems = 0;
-  cart.forEach((item) => {
-    checkOutItems += item.quantity;
-  });
-  checkOutEl.innerText = `${checkOutItems}`;
-};
-
 let checkOutHTML = '';
-
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
   let matchingProduct;
@@ -41,16 +29,16 @@ cart.forEach((cartItem) => {
           <span>Quantity: <span class="quantity-label quantity-label-${matchingProduct.id}">${cartItem.quantity}</span></span>
           <div class="product-quantity-container">
             <select class="checkout-quantity-selector" data-product-id="${matchingProduct.id}">
-            <option selected value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
+              <option selected value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
             </select>
           </div>
           <span class="update-quantity-link link-primary" data-product-id="${matchingProduct.id}">
@@ -108,6 +96,7 @@ deleteButtons.forEach((link) => {
       cartContainer.remove();
     }
     updateCheckOutItems();
+    paymentCheckout();
     saveCartToLocalStorage();
   });
 });
@@ -122,13 +111,18 @@ updateButtons.forEach((button) => {
     const updateButtonQuantity = parseInt(updateQuantityEl.value);
     const cartItem = cart.find(item => item.productId === productId);
     let quantityLabel = document.querySelector(`.quantity-label-${productId}`);
-      
+    
     cartItem.quantity = updateButtonQuantity;
     quantityLabel.innerHTML = cartItem.quantity;
 
     updateCheckOutItems();
+    paymentCheckout();
     saveCartToLocalStorage();
   });
 });
 
+paymentCheckout();
 updateCheckOutItems();
+
+
+
