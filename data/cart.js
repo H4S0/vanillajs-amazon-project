@@ -1,3 +1,5 @@
+
+
 export let cart = JSON.parse(localStorage.getItem('cart')) || [{
   productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
   quantity: 2,
@@ -47,3 +49,22 @@ export const updateQuantity = () => {
 document.addEventListener('DOMContentLoaded', () => {
   updateQuantity();
 });
+
+let paymentCheckoutItems = document.querySelector('.payment-checkout-items');
+export const  paymentCheckout = () => {
+  let checkOutItems = 0;
+  cart.forEach((item) => {
+    checkOutItems += item.quantity;
+  });
+  paymentCheckoutItems.innerText = `Items (${checkOutItems}):`;
+}
+
+let checkOutEl = document.querySelector('.return-to-home-link');
+export const updateCheckOutItems = () => {
+  let checkOutItems = 0;
+  cart.forEach((item) => {
+    checkOutItems += item.quantity;
+  });
+  checkOutEl.innerText = `${checkOutItems}`;
+};
+//staviti ovo za računanje u jednu funkciju zbog ponavljanja
