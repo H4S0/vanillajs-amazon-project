@@ -2,6 +2,26 @@ import { cart, paymentCheckout, saveCartToLocalStorage, updateCheckOutItems } fr
 import { products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
+function calculateCheckoutPrice () {
+  let total = 0;
+  cart.forEach((cartItem) => {
+    const product = products.find(product => product.id === cartItem.productId);
+    if(product) {
+      total += cartItem.quantity * product.priceCents;
+    }
+  })
+  return total;
+}
+
+let paymantCheckoutPrice = document.querySelector('.payment-summary-money');
+const updateTotalPrice = () => {
+  const totalPriceCents = calculateCheckoutPrice();
+  if (paymantCheckoutPrice) {
+    paymantCheckoutPrice.innerText = formatCurrency(totalPriceCents);
+  }
+};
+
+
 let checkOutHTML = '';
 cart.forEach((cartItem) => {
   const productId = cartItem.productId;
@@ -97,6 +117,7 @@ deleteButtons.forEach((link) => {
     }
     updateCheckOutItems();
     paymentCheckout();
+    updateTotalPrice();
     saveCartToLocalStorage();
   });
 });
@@ -117,12 +138,11 @@ updateButtons.forEach((button) => {
 
     updateCheckOutItems();
     paymentCheckout();
+    updateTotalPrice();
     saveCartToLocalStorage();
   });
 });
 
 paymentCheckout();
-updateCheckOutItems();
-
-
+updateTotalPrice();
 
