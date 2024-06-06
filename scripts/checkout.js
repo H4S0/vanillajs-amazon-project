@@ -143,6 +143,7 @@ updateButtons.forEach((button) => {
   });
 });
 
+updateCheckOutItems();
 paymentCheckout();
 updateTotalPrice();
 
