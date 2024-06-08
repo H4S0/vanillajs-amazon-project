@@ -16,12 +16,25 @@ function calculateCheckoutPrice () {
   return total;
 }
 
-let paymantCheckoutPrice = document.querySelector('.payment-summary-money');
+function calculateShippingPrice() {
+  let total = 0;
+  cart.forEach((cartItem) => {
+    const deliveryOption = getDeliveryOption(cartItem.deliveryOptionId);
+
+    total += deliveryOption.deliveryPrice;
+  });
+  return total;
+}
+
+let paymentCheckoutPrice = document.querySelector('.payment-summary-money');
+let paymentShippingPrice = document.querySelector('.payment-summary-money-shipping');
+
 const updateTotalPrice = () => {
-  const totalPriceCents = calculateCheckoutPrice();
-  if (paymantCheckoutPrice) {
-    paymantCheckoutPrice.innerText = formatCurrency(totalPriceCents);
-  }
+  const totalShipping = calculateShippingPrice();
+  const totalItemsPriceCents = calculateCheckoutPrice();
+
+  paymentCheckoutPrice.innerText = formatCurrency(totalItemsPriceCents);
+  paymentShippingPrice.innerText = formatCurrency(totalShipping);
 };
 
 export function renderOrderSummary() {
