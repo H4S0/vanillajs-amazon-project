@@ -35,18 +35,37 @@ function calculateBeTax() {
   return total;
 }
 
+function calculateTax() {
+  const paymentBeTax = calculateBeTax();
+  let tax = paymentBeTax * 0.1;
+  return tax;
+}
+
+function calculateTotal() {
+  const paymentBeTax = calculateBeTax();
+  const tax = calculateTax();
+  let total = tax + paymentBeTax;
+  return total;
+}
+
+let taxEl = document.querySelector('.payment-summary-money-tax');
 let paymentCheckoutPrice = document.querySelector('.payment-summary-money');
 let paymentShippingPrice = document.querySelector('.payment-summary-money-shipping');
 let paymentBeTaxEl = document.querySelector('.payment-summary-money-before-tax');
+let totalEl = document.querySelector('.payment-summary-money-total');
+
 const updateTotalPrice = () => {
   const totalShipping = calculateShippingPrice();
   const totalItemsPriceCents = calculateCheckoutPrice();
   const paymentTotalBeTax = calculateBeTax();
+  const tax = calculateTax();
+  const total = calculateTotal();
 
   paymentCheckoutPrice.innerText = `$${formatCurrency(totalItemsPriceCents)}`;
   paymentShippingPrice.innerText =`$${formatCurrency(totalShipping)}`;
   paymentBeTaxEl.innerText = `$${formatCurrency(paymentTotalBeTax)}`;
-  //dodadi kalkulus za taxu te istu prikazati
+  taxEl.innerText = `$${formatCurrency(tax)}`;
+  totalEl.innerText = `$${formatCurrency(total)}`;
 };
 
 export function renderOrderSummary() {
