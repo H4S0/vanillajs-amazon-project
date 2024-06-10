@@ -26,15 +26,27 @@ function calculateShippingPrice() {
   return total;
 }
 
-let paymentCheckoutPrice = document.querySelector('.payment-summary-money');
-let paymentShippingPrice = document.querySelector('.payment-summary-money-shipping');
-
-const updateTotalPrice = () => {
+function calculateBeTax() {
+  let total = 0;
   const totalShipping = calculateShippingPrice();
   const totalItemsPriceCents = calculateCheckoutPrice();
 
-  paymentCheckoutPrice.innerText = formatCurrency(totalItemsPriceCents);
-  paymentShippingPrice.innerText = formatCurrency(totalShipping);
+  total = totalShipping + totalItemsPriceCents;
+  return total;
+}
+
+let paymentCheckoutPrice = document.querySelector('.payment-summary-money');
+let paymentShippingPrice = document.querySelector('.payment-summary-money-shipping');
+let paymentBeTaxEl = document.querySelector('.payment-summary-money-before-tax');
+const updateTotalPrice = () => {
+  const totalShipping = calculateShippingPrice();
+  const totalItemsPriceCents = calculateCheckoutPrice();
+  const paymentTotalBeTax = calculateBeTax();
+
+  paymentCheckoutPrice.innerText = `$${formatCurrency(totalItemsPriceCents)}`;
+  paymentShippingPrice.innerText =`$${formatCurrency(totalShipping)}`;
+  paymentBeTaxEl.innerText = `$${formatCurrency(paymentTotalBeTax)}`;
+  //dodadi kalkulus za taxu te istu prikazati
 };
 
 export function renderOrderSummary() {
@@ -51,9 +63,7 @@ export function renderOrderSummary() {
     });
     
     const deliveryOptionId = cartItem.deliveryOptionId;
-
     const deliveryOption = getDeliveryOption(deliveryOptionId);
-
     const today = dayjs();
     const deliveryDate = today.add(
       deliveryOption.deliveryTime,
